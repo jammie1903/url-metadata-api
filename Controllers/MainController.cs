@@ -9,23 +9,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
 using ExtensionMethods;
+using Enums;
 
 namespace url_preview.Controllers
 {
 
-    public class UriParams
-    {
-        public string uri;
-    }
-
-
-    [Route("api/[controller]")]
+    [Route("/url-preview")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class MainController : ControllerBase
     {
         // GET api/values/5
         [HttpGet]
-        public ActionResult<object> Get([FromQuery(Name = "uri")] string uri)
+        public ActionResult<object> Get([FromQuery(Name = "uri")] string uri, [FromQuery(Name = "priority")] string priority)
         {
             string html;
             try
@@ -36,9 +31,10 @@ namespace url_preview.Controllers
             {
                 return NotFound("Header could not be read for this url: " + e.Message);
             }
+            Enum.TryParse(priority, out MetadataType metadataType);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(html);
-            return doc.extractPageMetadata();
+            return doc.extractPageMetadata(metadataType);
         }
 
         private string readHeader(string uri)
