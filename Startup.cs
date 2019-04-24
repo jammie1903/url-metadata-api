@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using React.AspNet;
+using UrlMetadata.Services;
+using UrlMetadata.Services.Interfaces;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+using JavaScriptEngineSwitcher.ChakraCore;
 
-namespace url_preview
+namespace UrlMetadata
 {
     public class Startup
     {
@@ -25,7 +24,15 @@ namespace url_preview
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddJsEngineSwitcher(options =>
+                options.DefaultEngineName = ChakraCoreJsEngine.EngineName
+            )
+                .AddChakraCore();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<IUrlService, UrlService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +48,14 @@ namespace url_preview
             }
 
             app.UseHttpsRedirection();
+
+            app.UseReact(config =>
+            {
+                config.AddScript("~/js/main.jsx");
+            });
+
+            app.UseStaticFiles();
+
             app.UseMvc();
         }
     }

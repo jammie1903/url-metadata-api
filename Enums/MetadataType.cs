@@ -1,11 +1,11 @@
 
-namespace Enums
+namespace UrlMetadata.Enums
 {
     public enum MetadataType
     {
-        og = 0,
-        twitter = 1,
-        generic = 2
+        OpenGraph = 0,
+        Twitter = 1,
+        Generic = 2
     }
 
 }
