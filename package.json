@@ -4,7 +4,8 @@
   "description": "An Api to retrieve url metadata",
   "main": "''",
   "scripts": {
-    "start": "node-sass styles/index.scss wwwroot/css/styles.css"
+    "start": "npm run build",
+    "build": "node-sass styles/index.scss wwwroot/css/styles.css"
   },
   "repository": {
     "type": "git",
