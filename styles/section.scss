@@ -1,0 +1,37 @@
+.section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+
+  &.unpadded {
+    padding: 0;
+  }
+
+  &.unpadded-top {
+    padding-top: 0;
+  }
+
+  &.unpadded-bottom {
+    padding-bottom: 0;
+  }
+
+  &.unpadded-left {
+    padding-left: 0;
+  }
+
+  &.unpadded-right {
+    padding-right: 0;
+  }
+
+  &.max-width {
+    max-width: $brk-xxl;
+  }
+
+  &.small-width {
+    max-width: 800px;
+  }
+
+  &.white {
+    background-color: $colour-white;
+  }
+}

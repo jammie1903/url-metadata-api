@@ -1,0 +1,28 @@
+{
+  "name": "url-metadata-api",
+  "version": "0.0.1",
+  "description": "An Api to retrieve url metadata",
+  "main": "''",
+  "scripts": {
+    "start": "node-sass styles/index.scss wwwroot/css/styles.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jammie1903/url-metadata-api.git"
+  },
+  "keywords": [
+    "api",
+    "url",
+    "metadata"
+  ],
+  "author": "Jamie Pennell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jammie1903/url-metadata-api/issues"
+  },
+  "homepage": "https://github.com/jammie1903/url-metadata-api#readme",
+  "dependencies": {
+    "node-sass": "^4.11.0"
+  }
+, "-vs-binding":{"BeforeBuild":["start"]}
+}

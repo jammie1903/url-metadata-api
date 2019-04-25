@@ -1,0 +1,22 @@
+.icon {
+  width: 1em;
+  line-height: 1em;
+  position: relative;
+  display: inline-block;
+
+  &:before {
+    content: '\A0';
+  }
+}
+
+@function icon($name) {
+  @return url('/assets/svg/#{$name}.svg');
+}
+
+
+
+.site-icon {
+  background: icon(icon) no-repeat;
+  background-size: contain;
+  background-position: 50%;
+}
