@@ -16,7 +16,7 @@ namespace UrlMetadata.Dtos
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public AlternativesDto Descriptions { get; set; }
         public string Author { get; set; }
-        public string Publisher { get; set; }
+        public string ThemeColor { get; set; }
         public string Type { get; set; }
         public string Card { get; set; }
         public string Image { get; set; }

@@ -1,7 +1,7 @@
 {
   "name": "url-metadata-api",
   "version": "0.0.1",
-  "description": "An Api to retrieve url metadata",
+  "description": "An API to retrieve url metadata",
   "main": "''",
   "scripts": {
     "start": "npm run build",

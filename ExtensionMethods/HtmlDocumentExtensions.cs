@@ -95,12 +95,14 @@ namespace UrlMetadata.ExtensionMethods
             var description = Prioritise(priority, descriptions);
 
             // author
-            // <link rel="author" href="authorUrl">
-            var author = document.ReadFirstNodeAttributeValue("//head/link[@rel='author']", "href");
+            // <meta name="author" content="John Smith">
+            var author = document.ReadFirstNodeAttributeValue("//head/meta[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='author']", "content");
 
-            // publisher - like author, but usally the business
-            // <link rel=”publisher” href="authorUrl">
-            var publisher = document.ReadFirstNodeAttributeValue("//head/link[@rel='publisher']", "href");
+            // theme color
+            // <meta name="theme-color" content="#048598" />
+            var themeColor = document.ReadFirstNodeAttributeValue(
+                "//head/meta[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='theme-color']",
+                "content");
 
             // type
             // <meta property=”og:type” content=”article”/>
@@ -148,7 +150,7 @@ namespace UrlMetadata.ExtensionMethods
                 Description = description,
                 Descriptions = returnAll ? descriptions : null,
                 Author = author,
-                Publisher = publisher,
+                ThemeColor = themeColor,
                 Type = type,
                 Card = card,
                 Image = image,
