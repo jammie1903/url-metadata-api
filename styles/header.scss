@@ -6,6 +6,10 @@
     font-size: 42px;
     line-height: 1.2;
     margin: 0;
+    
+    @media only screen and (max-width: $brk-l) {
+      font-size: 32px;
+    }
   }
 
   .section {

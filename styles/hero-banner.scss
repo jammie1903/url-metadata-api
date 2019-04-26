@@ -2,18 +2,38 @@
   padding: 56px 0;
   background: $primary-color;
 
+  @media only screen and (max-width: $brk-l) {
+    padding: 16px 0 0;
+  }
+
   .section {
+    position: relative;
     display: flex;
     align-items: center;
+
+    @media only screen and (max-width: $brk-l) {
+      flex-direction: column;
+    }
   }
 
   .text {
-    margin-left: 48px;
+    margin-left: 24px;
     color: $color-white;
+
+    @media only screen and (max-width: $brk-l) {
+      margin-left: 0;
+    }
    
     h1, h2 {
       font-size: 48px;
       line-height: 1.2;
+
+      @media only screen and (max-width: $brk-l) {
+        font-size: 36px;
+        margin-top: 16px;
+        display: flex;
+        align-items: center;
+      }
     }
   }
 
@@ -21,5 +41,25 @@
     height: 160px;
     width: 160px;
     flex-shrink: 0;
+
+    @media only screen and (max-width: $brk-l) {
+      display: none;
+    }
+  }
+
+  h1 .hero-banner-image,
+  h2 .hero-banner-image {
+    height: 96px;
+    width: 96px;
+    display: none;
+    margin-right: 24px;
+    
+    @media only screen and (max-width: $brk-l) {
+      display: inline-block;
+    }
+
+    @media only screen and (max-width: $brk-m) {
+      display: none;
+    }
   }
 }
