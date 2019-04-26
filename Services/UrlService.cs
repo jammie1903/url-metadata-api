@@ -10,6 +10,7 @@ namespace UrlMetadata.Services
         public string ReadHeader(string url)
         {
             var request = (HttpWebRequest) WebRequest.Create(url);
+            request.Timeout = 3000;
             using (var response = (HttpWebResponse) request.GetResponse())
             using (var stream = response.GetResponseStream())
             {

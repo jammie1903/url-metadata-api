@@ -25,22 +25,27 @@
   }
 
   <meta name="theme-color" content="#048598" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/themes/prism.min.css" rel="stylesheet"/>
   <link href="~/css/styles.css" rel="stylesheet"/>
 </head>
 <body>
-<header class="header">
-  <div class="section max-width">
-    <h1>
-      <i class="site-icon icon"></i>
-      Url Metadata API
-    </h1>
-  </div>
-</header>
-@RenderBody()
-<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=default,fetch"></script>
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
-<script src="@Url.Content("~/js/main.jsx")"></script>
-@Html.ReactInitJavaScript()
+  <header class="header">
+    <div class="section max-width">
+      <h1>
+        <i class="site-icon icon"></i>
+        Url Metadata API
+      </h1>
+    </div>
+  </header>
+  @RenderBody()
+
+  <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=default,fetch"></script>
+  <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/prism.min.js"></script>
+  <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/components/prism-json.min.js"></script>
+  <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
+  <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
+
+  <script src="@Url.Content("~/js/main.jsx")"></script>
+  @Html.ReactInitJavaScript()
 </body>
 </html>

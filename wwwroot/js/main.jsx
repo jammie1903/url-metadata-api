@@ -5,7 +5,8 @@
     this.state = {
       url: '',
       error: '',
-      output: 'The response will appear here'
+      outputPlaceholder: 'The response will appear here',
+      output: null
     }
   }
 
@@ -22,12 +23,15 @@
       return;
     }
 
-    this.setState({ error: '' });
+    this.setState({ error: '', output: null, outputPlaceholder: '' });
 
     fetch(`/api/metadata?url=${this.state.url}&all=true`)
       .then(response => response.json())
-      .then(json => this.setState({ output: JSON.stringify(json, null, ' ') }))
-      .catch(() => this.setState({ output: 'An error occured whilst trying to retrieve the metadata' }));
+      .then(json => {
+        const codeHtml = Prism.highlight(JSON.stringify(json, null, ' '), Prism.languages.json, 'json');
+        this.setState({ output: codeHtml, outputPlaceholder: ''});
+      })
+      .catch(() => this.setState({ output: null, outputPlaceholder: 'An error occured whilst trying to retrieve the metadata' }));
   }
 
   onUrlChange = e => {
@@ -45,9 +49,14 @@
         </div>
         <span className='error'>{this.state.error}</span>
         <pre>
-          <code id="output">
-            {this.state.output}
-          </code>
+          {this.state.output ? (
+            <code id="output" dangerouslySetInnerHTML={{ __html: this.state.output }}>
+            </code>
+          ) : (
+            <code id="output">
+              {this.state.outputPlaceholder}
+            </code>
+          )}
         </pre>
       </form>
     );

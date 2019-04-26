@@ -3,3 +3,4 @@
 /.vs
 /node_modules/
 /wwwroot/css/
+npm-debug.log
