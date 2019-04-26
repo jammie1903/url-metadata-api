@@ -14,6 +14,8 @@ namespace UrlMetadata
 {
     public class Startup
     {
+        private const string AllowAllOrigins = "_AllowAllOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,6 +35,17 @@ namespace UrlMetadata
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IUrlService, UrlService>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowAllOrigins,
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

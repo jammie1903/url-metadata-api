@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Cors;
 using UrlMetadata.ExtensionMethods;
 using UrlMetadata.Enums;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ namespace UrlMetadata.Controllers
 {
     [Route("/api/metadata")]
     [ApiController]
+    [EnableCors("_AllowAllOrigins")]
     public class MetadataController : ControllerBase
     {
         private readonly ILogger<MetadataController> _logger;

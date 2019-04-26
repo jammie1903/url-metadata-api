@@ -2,13 +2,25 @@
 @model object
 
 @{
-  ViewBag.Title = "title";
+  ViewBag.Title = "Url Metadata Api";
+  ViewBag.Description = "The API for All Your Url Metadata Needs";
   Layout = "_Layout";
 }
 
-<h2>title</h2>
+<div class="hero-banner">
+  <div class="section max-width">
+    <i class="site-icon icon hero-banner-image"></i>
+    <div class="text">
+      <h2>@ViewBag.Description</h2>
+      <p>
+        Ever needed to display some information about a url but didn't know how to get hold of it? This API is your answer.
+        <br />
+        This api scans a given url to find the metadata stored in the pages header, and returns it to you as JSON.
+      </p>
+    </div>
+  </div>
+</div>
 
-@Html.React("Test", new
-{
-    title = " test"
-})
+<div class="section max-width">
+  @Html.React("TestUrlForm", new { })
+</div>

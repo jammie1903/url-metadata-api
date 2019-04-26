@@ -1,0 +1,44 @@
+@mixin button {
+  // @include sans-serif-font;
+  -webkit-appearance: none;
+  color: $text-color;
+  background-color: $secondary-color;
+  cursor: pointer;
+  transition: all $animation-length-tiny;
+  white-space: nowrap;
+  font-size: 16px;
+  padding: 16px 48px;
+  margin-top: 16px;
+  border: 1px solid $primary-color;
+
+  &:active {
+    background-color: darken($secondary-color, 20%);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: initial;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: darken($secondary-color, 10%);
+  }
+}
+
+input[type=button].button,
+input[type=submit].button,
+button.button {
+  @include button;
+
+  &.full-width {
+    width: 100%;
+  }
+}
+
+a.button {
+  @include button;
+  @include link-color($primary-color);
+  display: inline-block;
+  vertical-align: bottom;
+  text-decoration: none;
+}

@@ -1,0 +1,25 @@
+.hero-banner {
+  padding: 56px 0;
+  background: $primary-color;
+
+  .section {
+    display: flex;
+    align-items: center;
+  }
+
+  .text {
+    margin-left: 48px;
+    color: $color-white;
+   
+    h1, h2 {
+      font-size: 48px;
+      line-height: 1.2;
+    }
+  }
+
+  .hero-banner-image {
+    height: 160px;
+    width: 160px;
+    flex-shrink: 0;
+  }
+}

@@ -1,0 +1,18 @@
+//
+//	@usage: set the colour of a link, including its 'visited' state
+//	@param: {Color} $color
+//	@param: {Color?} $hover-color
+//
+@mixin link-color($color, $hover-color: null) {
+  color: $color;
+
+  &:visited:not(:hover) {
+    color: $color;
+  }
+
+  @if ($hover-color != null) {
+    &:hover {
+      color: $hover-color;
+    }
+  }
+}
