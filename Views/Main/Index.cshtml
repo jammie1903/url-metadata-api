@@ -26,4 +26,22 @@
 
 <div class="section max-width">
   @Html.React("TestUrlForm", new { })
+  
+  <h3>Want to try it yourself?</h3>
+    
+  The url is <pre>@(Context.Request.Scheme + "://" + Context.Request.Host)/api/metadata?url={put the url here!}</pre>
+
+  <h4>Parameters</h4>
+  
+  <p>
+    <strong>url (mandatory):</strong> The url you wish to lookup
+  </p>
+  <p>
+    <strong>priority:</strong> Which type of metadata should be treated as priority, either 
+    <a target="_blank" rel="noopener" href="http://ogp.me/">OpenGraph</a> (the default), 
+    <a target="_blank" rel="noopener" href="https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html">Twitter</a>, or generic.
+  </p>
+  <p>
+    <strong>all:</strong> Set this to <code>true</code> if you wish to retrieve all types of metadata for those that can be provided in multiple formats. eg. titles, descriptions and images.
+  </p>
 </div>

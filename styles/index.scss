@@ -27,6 +27,22 @@ input {
   background: $color-white;
 }
 
+strong {
+  color: $secondary-color;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+a {
+  @include link-color($tertiary-color, lighten($tertiary-color, 10%));
+}
+
 .input-container {
   display: flex;
   margin: 8px 0;

@@ -11,7 +11,7 @@
   }
 
   <meta property="og:site_name" content="Url Metadata API" />
-  <meta name="twitter:domain" content="@(Context.Request.Scheme + Context.Request.Host)" />
+  <meta name="twitter:domain" content="@(Context.Request.Scheme + "://" + Context.Request.Host)" />
 
   @if (!string.IsNullOrWhiteSpace(ViewBag.Description))
   {
