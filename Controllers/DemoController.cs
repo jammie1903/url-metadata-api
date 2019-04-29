@@ -2,9 +2,9 @@
 
 namespace UrlMetadata.Controllers
 {
-    [Route("/")]
+    [Route("/demo")]
     [Controller]
-    public class HomeController : Controller
+    public class DemoController : Controller
     {
         public ActionResult Index()
         {

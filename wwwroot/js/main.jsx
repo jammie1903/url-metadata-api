@@ -1,9 +1,20 @@
-﻿class TestUrlForm extends React.Component {
+﻿
+if(typeof window !== 'undefined') {
+  if (window.bowser.mobile) {
+    document.documentElement.classList.add('mobile');
+  } else if (window.bowser.tablet) {
+    document.documentElement.classList.add('tablet');
+  } else {
+    document.documentElement.classList.add('desktop');
+  }
+}
+
+class TestUrlForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      url: '',
+      url: props.url || '',
       error: '',
       outputPlaceholder: 'The response will appear here',
       output: null

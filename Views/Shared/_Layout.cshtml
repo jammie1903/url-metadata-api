@@ -26,7 +26,7 @@
 
   <meta name="author" content="Jamie Pennell">
 
-  <meta name="theme-color" content="#048598" />
+  <meta name="theme-color" content="#8D99AE" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/themes/prism.min.css" rel="stylesheet" />
   <link href="~/css/styles.css" rel="stylesheet" />
 
@@ -40,15 +40,19 @@
   </script>
 </head>
 <body>
-  <header class="header">
-    <div class="section max-width">
+<header class="header">
+  <div class="section max-width">
+    <a href="/">
       <h1>
         <i class="site-icon icon"></i>
         Url Metadata API
       </h1>
-    </div>
-  </header>
+    </a>
+  </div>
+</header>
+<div class="body-content">
   @RenderBody()
+</div>
 <footer>
   <div class="section max-width">
     Built by Jamie Pennell
@@ -61,8 +65,9 @@
   <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.16.0/components/prism-json.min.js"></script>
   <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
   <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
+  <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/bowser/1.9.4/bowser.min.js"></script>  
 
-  <script src="@Url.Content("~/js/main.jsx")"></script>
+<script src="@Url.Content("~/js/main.jsx")"></script>
   @Html.ReactInitJavaScript()
 </body>
 </html>

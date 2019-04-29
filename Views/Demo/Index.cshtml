@@ -1,0 +1,16 @@
+﻿@using React.AspNet
+@model object
+
+@{
+  ViewBag.Title = "Demo - Url Metadata API";
+  ViewBag.Description = "Use this page to test out the url metadata API";
+  Layout = "_Layout";
+}
+
+<div class="section max-width">
+  <h2>Demo</h2>
+  <p>@ViewBag.Description</p>
+  @Html.React("TestUrlForm", new {
+    url = Context.Request.Scheme + "://" + Context.Request.Host
+  })
+</div>

@@ -45,7 +45,7 @@ button.button {
 
 a.button {
   @include button;
-  @include link-color($primary-color);
+  @include link-color($primary-color, $primary-color);
   display: inline-block;
   vertical-align: bottom;
   text-decoration: none;

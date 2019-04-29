@@ -1,5 +1,5 @@
 .hero-banner {
-  padding: 56px 0;
+  padding: 56px 0 0;
   background: $primary-color;
 
   @media only screen and (max-width: $brk-l) {
@@ -13,6 +13,10 @@
 
     @media only screen and (max-width: $brk-l) {
       flex-direction: column;
+    }
+
+    p {
+      margin-bottom: 0;
     }
   }
 
