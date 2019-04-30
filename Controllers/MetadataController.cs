@@ -9,7 +9,7 @@ using UrlMetadata.Services.Interfaces;
 
 namespace UrlMetadata.Controllers
 {
-    [Route("/api/metadata")]
+    [Route("/api")]
     [ApiController]
     [EnableCors("_AllowAllOrigins")]
     public class MetadataController : ControllerBase
@@ -25,10 +25,19 @@ namespace UrlMetadata.Controllers
         }
 
         [HttpGet]
+        [Route("ping")]
+        public ActionResult<object> Ping()
+        {
+            return new { data = new {datetime = DateTime.Now} };
+        }
+
+        [HttpGet]
+        [Route("metadata")]
         public ActionResult<object> Get(
             [FromQuery(Name = "url")] string url,
             [FromQuery(Name = "priority")] string priority,
-            [FromQuery(Name = "all")] bool all)
+            [FromQuery(Name = "all")] bool all,
+            [FromQuery(Name = "timeout")] int timeout = 1000)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -36,10 +45,12 @@ namespace UrlMetadata.Controllers
                 return BadRequest("Please specify a url");
             }
 
+            timeout = Math.Max(Math.Min(timeout, 3000), 100);
+
             string html;
             try
             {
-                html = _urlService.ReadHeader(url);
+                html = _urlService.ReadHeader(url, timeout);
             }
             catch (Exception e)
             {

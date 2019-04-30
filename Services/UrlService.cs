@@ -7,10 +7,10 @@ namespace UrlMetadata.Services
 {
     public class UrlService : IUrlService
     {
-        public string ReadHeader(string url)
+        public string ReadHeader(string url, int timeout)
         {
             var request = (HttpWebRequest) WebRequest.Create(url);
-            request.Timeout = 3000;
+            request.Timeout = timeout;
             using (var response = (HttpWebResponse) request.GetResponse())
             using (var stream = response.GetResponseStream())
             {

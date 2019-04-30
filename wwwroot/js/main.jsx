@@ -30,6 +30,10 @@ class TestUrlForm extends React.Component {
       return;
     }
 
+    if (this.urlInput.value.indexOf('://') === -1) {
+      this.urlInput.value = `https://${this.urlInput.value}`;
+    }
+
     if (!this.urlInput.checkValidity()) {
       this.setState({ error: 'Please enter a valid url' });
       return;
@@ -37,7 +41,7 @@ class TestUrlForm extends React.Component {
 
     this.setState({ error: '', output: null, outputPlaceholder: '' });
 
-    fetch(`/api/metadata?url=${this.state.url}${this.state.all ? '&all=true' : ''}&priority=${this.state.priority}`)
+    fetch(`/api/metadata?url=${this.urlInput.value.trim()}${this.state.all ? '&all=true' : ''}&priority=${this.state.priority}`)
       .then(response => response.json())
       .then(json => {
         const codeHtml = Prism.highlight(JSON.stringify(json, null, ' '), Prism.languages.json, 'json');

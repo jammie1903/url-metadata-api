@@ -2,6 +2,6 @@
 {
     public interface IUrlService
     {
-        string ReadHeader(string url);
+        string ReadHeader(string url, int timeout);
     }
 }
