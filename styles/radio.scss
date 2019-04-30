@@ -1,0 +1,47 @@
+.radio {
+  display: inline-block;
+  position: relative;
+  padding-left: 20px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+
+  .mark {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: $color-white;
+    border: 1px solid $primary-color;
+    border-radius: 7px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      opacity: 0;
+      left: 2px;
+      top: 2px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: $primary-color;
+      transition: opacity $animation-length-tiny;
+    }
+  }
+
+  input:checked ~ .mark:after {
+    opacity: 1;
+  }
+}

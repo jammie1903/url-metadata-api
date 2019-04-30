@@ -1,0 +1,31 @@
+.wrap-table {
+  font-size: 18px;
+  line-height: 1.4;
+
+  td {
+    vertical-align: top;
+    padding: 8px 0;
+  }
+
+  td:first-of-type {
+    white-space: nowrap;
+    padding: 8px 8px 8px 0;
+    text-align: right;
+  }
+
+  @media only screen and (max-width: $brk-l) {
+    tr {
+      display: block;
+    }
+
+    td {
+      display: block;
+    }
+
+    td:first-of-type {
+      white-space: normal;
+      text-align: left;
+      padding-bottom: 0;
+    }
+  }
+}

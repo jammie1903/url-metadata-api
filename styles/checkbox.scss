@@ -1,0 +1,48 @@
+.checkbox {
+  display: inline-block;
+  position: relative;
+  padding-left: 24px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-bottom: 8px;
+  
+  input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: $color-white;
+    border: 1px solid $primary-color;
+
+    &:after {
+      content: '';
+      position: absolute;
+      opacity: 0;
+      left: 4.5px;
+      top: 1px;
+      width: 5px;
+      height: 10px;
+      border: solid $primary-color;
+      border-width: 0 2px 2px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      transition: opacity $animation-length-tiny;
+    }
+  }
+
+  input:checked ~ .checkmark:after {
+    opacity: 1;
+  }
+}

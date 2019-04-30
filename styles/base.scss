@@ -1,0 +1,65 @@
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+  font-style: normal;
+  overflow-x: hidden;
+  height: 100%;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+body {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 18px;
+  line-height: 1.4;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: $primary-color;
+  color: $light-text-color;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.desktop {
+  body {
+    height: 1px; //IE workaround
+  }
+}
+
+.body-content {
+  flex-grow: 1;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-justify {
+  text-align: justify;
+}
+
+.error {
+  color: $error-text-color;
+  display: inline-block;
+  font-weight: bold;
+}
