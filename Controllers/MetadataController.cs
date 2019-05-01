@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using UrlMetadata.ExtensionMethods;
 using UrlMetadata.Enums;
 using Microsoft.Extensions.Logging;
+using UrlMetadata.Dtos;
 using UrlMetadata.Services.Interfaces;
 
 namespace UrlMetadata.Controllers
@@ -28,7 +30,7 @@ namespace UrlMetadata.Controllers
         [Route("ping")]
         public ActionResult<object> Ping()
         {
-            return new { data = new {datetime = DateTime.Now} };
+            return new {datetime = DateTime.Now};
         }
 
         [HttpGet]
@@ -42,7 +44,7 @@ namespace UrlMetadata.Controllers
             if (string.IsNullOrWhiteSpace(url))
             {
                 _logger.LogInformation("Request received with no url provided");
-                return BadRequest("Please specify a url");
+                return BadRequest(new ErrorResponseDto("Please specify a url"));
             }
 
             timeout = Math.Max(Math.Min(timeout, 3000), 100);
@@ -55,13 +57,13 @@ namespace UrlMetadata.Controllers
             catch (Exception e)
             {
                 _logger.LogInformation($"Could not read url: {url}", e);
-                return NotFound("Page metadata could not be read for this url");
+                return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
             }
 
             Enum.TryParse(priority, true, out MetadataType metadataType);
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
-            return new { data = doc.ExtractPageMetadata(metadataType, all) };
+            return doc.ExtractPageMetadata(metadataType, all);
         }
     }
 }

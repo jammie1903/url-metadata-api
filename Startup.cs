@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,9 @@ using UrlMetadata.Services;
 using UrlMetadata.Services.Interfaces;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using JavaScriptEngineSwitcher.ChakraCore;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Logging;
+using UrlMetadata.Middleware;
 
 namespace UrlMetadata
 {
@@ -35,7 +38,13 @@ namespace UrlMetadata
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddReact();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                options.OutputFormatters.RemoveType<JsonOutputFormatter>();
+                options.OutputFormatters.Add(new CustomJsonOutputFormatter());
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddSingleton<IUrlService, UrlService>();
 
             services.AddCors(options =>
