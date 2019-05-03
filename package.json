@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/jammie1903/url-metadata-api#readme",
   "dependencies": {
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.11.0",
+    "tar": ">=4.4.2"
   }
 
 }
