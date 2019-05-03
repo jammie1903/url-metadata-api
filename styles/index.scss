@@ -12,6 +12,7 @@
 @import 'checkbox';
 @import 'radio';
 @import 'options';
+@import 'endpoint-info';
 
 p {
   font-size: 18px;
@@ -81,4 +82,8 @@ pre {
   margin: 8px 0;
   overflow: auto;
   font-size: 14px;
+}
+
+code[class*=language-], pre[class*=language-] {
+  font-size: 16px;
 }

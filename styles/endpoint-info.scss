@@ -1,0 +1,41 @@
+.endpoint-info {
+  border: 2px solid $tertiary-color;
+  background: $color-white;
+  color: $primary-color;
+  padding: 8px;
+  overflow: auto;
+  font-size: 16px;
+
+  code {
+    margin-left: 4px;
+  }
+}
+
+.http-method {
+  color: $light-text-color;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: grey;
+  border: 1px solid darken(grey, 20%);
+
+  &.get {
+    background: #119911;
+    border-color: darken(#119911, 20%);
+  }
+
+  &.post {
+    background: #3344dd;
+    border-color: darken(#3344dd, 20%);
+  }
+
+  &.put {
+    background: #9911bb;
+    border-color: darken(#9911bb, 20%);
+  }
+
+  &.delete {
+    background: #ee2222;
+    border-color: darken(#ee2222, 20%);
+  }
+}

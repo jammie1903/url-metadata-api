@@ -6,14 +6,6 @@ using UrlMetadata.Enums;
 
 namespace UrlMetadata.ExtensionMethods
 {
-    public static class StringExtensions
-    {
-        public static string Or(this string str, string alternative)
-        {
-            return string.IsNullOrWhiteSpace(str) ? alternative : str;
-        }
-    }
-
     public static class HtmlDocumentExtensions
     {
         public static HtmlNode ReadFirstNode(this HtmlDocument document, string xpathLookup)
@@ -59,8 +51,9 @@ namespace UrlMetadata.ExtensionMethods
         /// </summary>
         /// <param name="document"></param>
         /// <param name="priority"></param>
+        /// <param name="returnAll">if true, all alternatives are returned for fields with multiple sources</param>
         /// <returns></returns>
-        public static object ExtractPageMetadata(this HtmlDocument document, MetadataType priority, bool returnAll)
+        public static UrlMetadataDto ExtractPageMetadata(this HtmlDocument document, MetadataType priority, bool returnAll)
         {
             // title
             // <title> tag

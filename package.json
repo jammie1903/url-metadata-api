@@ -25,5 +25,5 @@
   "dependencies": {
     "node-sass": "^4.11.0"
   }
-, "-vs-binding":{"BeforeBuild":["start"]}
+
 }

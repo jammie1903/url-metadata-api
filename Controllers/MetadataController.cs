@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using UrlMetadata.ExtensionMethods;
 using UrlMetadata.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using UrlMetadata.Attributes;
 using UrlMetadata.Dtos;
 using UrlMetadata.Services.Interfaces;
 
@@ -16,6 +17,16 @@ namespace UrlMetadata.Controllers
     [EnableCors("_AllowAllOrigins")]
     public class MetadataController : ControllerBase
     {
+        private const string PreferenceDescription = @"Which type of metadata should be treated as priority, either
+        <a target=""_blank"" rel=""noopener"" href=""http://ogp.me/"">OpenGraph</a> (the default),
+        <a target = ""_blank"" rel=""noopener"" href=""https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html"">Twitter</a>, or generic.";
+
+        private const string AllDescription =
+            "Set this to `true` if you wish to retrieve all types of metadata for those that can be provided in multiple formats. eg. titles, descriptions and images.";
+
+        private const string TimeoutDescription =
+            "How long the api should wait for a response from the given url. Has an allowed range of 100 to 3000 milliseconds.";
+
         private readonly ILogger<MetadataController> _logger;
         private readonly IUrlService _urlService;
 
@@ -27,19 +38,19 @@ namespace UrlMetadata.Controllers
         }
 
         [HttpGet]
-        [Route("ping")]
+        [RouteDescribed("ping", "A basic ping endpoint you can use to make sure that the service is still running")]
         public ActionResult<object> Ping()
         {
             return new {datetime = DateTime.Now};
         }
 
         [HttpGet]
-        [Route("metadata")]
-        public ActionResult<object> Get(
-            [FromQuery(Name = "url")] string url,
-            [FromQuery(Name = "priority")] string priority,
-            [FromQuery(Name = "all")] bool all,
-            [FromQuery(Name = "timeout")] int timeout = 1000)
+        [RouteDescribed("metadata", "The main endpoint of this api, used to get the metadata of a given url")]
+        public ActionResult<UrlMetadataDto> GetMetadata(
+            [FromQueryDescribed("url", "The url you wish to lookup")] string url,
+            [FromQueryDescribed("preference", PreferenceDescription)] string preference = "OpenGraph",
+            [FromQueryDescribed("all", AllDescription)] bool all = false,
+            [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -60,7 +71,7 @@ namespace UrlMetadata.Controllers
                 return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
             }
 
-            Enum.TryParse(priority, true, out MetadataType metadataType);
+            Enum.TryParse(preference, true, out MetadataType metadataType);
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
             return doc.ExtractPageMetadata(metadataType, all);

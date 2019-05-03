@@ -1,0 +1,57 @@
+﻿@model IEnumerable<UrlMetadata.Dtos.ApiDoc.EndpointDto>
+@{
+  ViewData["Title"] = "Api Documentation";
+  Layout = "_Layout";
+}
+
+<div class="section max-width">
+
+  <h2>Api Documentation</h2>
+
+  @foreach (var method in Model)
+  {
+    <h3>@method.Name</h3>
+
+    <div class="endpoint-info">
+      @foreach (var httpMethod in method.Methods)
+      {
+        <span class="http-method @httpMethod.ToLower()">@httpMethod</span>
+      }
+      <code>@method.Route</code>
+    </div>
+
+    <p>@method.Description</p>
+
+    if (method.QueryParams.Any())
+    {
+      <h4>Query Parameters</h4>
+
+      <table class="wrap-table">
+        @foreach (var param in method.QueryParams)
+        {
+          <tr>
+            <td><strong>@param.Name@(param.Mandatory ? "*" : "") @param.Type:</strong></td>
+            <td>
+              @Html.Raw(param.Description)
+              <br />
+              @(param.Mandatory ? "" : $"default: {param.DefaultValue}")
+            </td>
+          </tr>
+        }
+      </table>
+    }
+
+    <span>Return Type: @method.ReturnType.Name</span>
+
+    if(method.ReturnType.Fields.Any())
+    {
+    <pre class="language-js">
+<code class="language-js"><span class="token punctuation">{</span>
+@foreach (var field in method.ReturnType.Fields) {
+  <span class="token comment">// @field.Description</span>
+  <span>@field.Name</span><span class="token punctuation">:</span> <span class="token function">@field.Type.Name</span><span class="token punctuation">,</span>
+  }
+<span class="token punctuation">}</span></code></pre>
+}
+    }
+</div>

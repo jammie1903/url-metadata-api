@@ -20,13 +20,12 @@ namespace UrlMetadata
     public class Startup
     {
         private const string AllowAllOrigins = "_AllowAllOrigins";
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -46,6 +45,7 @@ namespace UrlMetadata
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSingleton<IUrlService, UrlService>();
+            services.AddSingleton<IApiDocService, ApiDocService>();
 
             services.AddCors(options =>
             {
