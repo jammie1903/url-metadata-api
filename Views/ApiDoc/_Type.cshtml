@@ -1,0 +1,13 @@
+﻿@using UrlMetadata.ExtensionMethods
+@model UrlMetadata.Dtos.ApiDoc.TypeDto
+<span class="token punctuation">{</span>@if ((int)ViewData["indentation"] > 2) {<span class="type-expand-button"></span>}
+<span class="type">
+@foreach (var field in Model.Fields)
+{
+  var showComma = Array.IndexOf(Model.Fields, field) != Model.Fields.Length - 1;
+  if (!string.IsNullOrWhiteSpace(field.Description)) {
+@("".PadRight((int)ViewData["indentation"], ' '))<span class="token comment">// @field.Description</span>
+}
+@("".PadRight((int)ViewData["indentation"], ' '))<span>@field.Name</span><span class="token punctuation">:</span> <span class="token function">@field.Type.Name</span>@(field.Type.Fields.Any() ? Html.Partial("_Type", field.Type, ViewData.Extend("indentation", (int) ViewData["indentation"] + 2)) : null)if(showComma){<span class="token punctuation">,</span>}@('\n')
+}
+@("".PadRight((int)ViewData["indentation"] - 2, ' '))</span><span class="token punctuation">}</span>

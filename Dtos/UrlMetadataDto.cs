@@ -21,7 +21,6 @@ namespace UrlMetadata.Dtos
         [Description("The endpoint description based upon the selected preference")]
         public string Description { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Description("All available descriptions found on the page. `meta description`, `meta og:description` or `meta twitter:description`")]
         public AlternativesDto Descriptions { get; set; }
 

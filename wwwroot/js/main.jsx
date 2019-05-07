@@ -7,6 +7,18 @@ if(typeof window !== 'undefined') {
   } else {
     document.documentElement.classList.add('desktop');
   }
+
+  domready(() => {
+    Array.from(document.querySelectorAll('.type-expand-button')).forEach(e => {
+      e.addEventListener('click', () => {
+        if (e.classList.contains('open')) {
+          e.classList.remove('open');
+        } else {
+          e.classList.add('open');
+        }
+      })
+    });
+  });
 }
 
 class TestUrlForm extends React.Component {

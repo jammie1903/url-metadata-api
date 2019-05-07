@@ -67,7 +67,7 @@ namespace UrlMetadata.Services
             };
         }
 
-        private QueryParameterDto GetQueryParameterInfo(ParameterInfo parameterInfo)
+        private static QueryParameterDto GetQueryParameterInfo(ParameterInfo parameterInfo)
         {
             var attribute = parameterInfo.GetCustomAttribute<FromQueryAttribute>();
             var name = attribute?.Name ?? parameterInfo.Name;
@@ -97,10 +97,20 @@ namespace UrlMetadata.Services
             };
             _typeDictionary[clazz] = returnValue;
 
-            returnValue.Fields = clazz.Namespace.StartsWith("UrlMetadata") ? clazz.GetProperties()
-                .Select(GetPropertyInfo).ToArray() : new FieldDto[0];
+            returnValue.Fields = GetFields(clazz);
              
             return returnValue;
+        }
+
+        private FieldDto[] GetFields(Type clazz)
+        {
+            if (clazz.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(clazz.GetGenericTypeDefinition()))
+            {
+                clazz = clazz.GetGenericArguments()[0];
+            }
+
+            return clazz.Namespace.StartsWith("UrlMetadata") ? clazz.GetProperties()
+                .Select(GetPropertyInfo).ToArray() : new FieldDto[0];
         }
 
         private FieldDto GetPropertyInfo(PropertyInfo field)

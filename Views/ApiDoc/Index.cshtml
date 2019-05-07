@@ -46,12 +46,7 @@
     if(method.ReturnType.Fields.Any())
     {
     <pre class="language-js">
-<code class="language-js"><span class="token punctuation">{</span>
-@foreach (var field in method.ReturnType.Fields) {
-  <span class="token comment">// @field.Description</span>
-  <span>@field.Name</span><span class="token punctuation">:</span> <span class="token function">@field.Type.Name</span><span class="token punctuation">,</span>
-  }
-<span class="token punctuation">}</span></code></pre>
+<code class="language-js">@Html.Partial("_Type", method.ReturnType, new ViewDataDictionary(ViewData) { { "indentation", 2 } })</code></pre>
 }
     }
 </div>

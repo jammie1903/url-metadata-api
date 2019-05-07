@@ -22,7 +22,7 @@ namespace UrlMetadata.Controllers
         <a target = ""_blank"" rel=""noopener"" href=""https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html"">Twitter</a>, or generic.";
 
         private const string AllDescription =
-            "Set this to `true` if you wish to retrieve all types of metadata for those that can be provided in multiple formats. eg. titles, descriptions and images.";
+            "Set this to <code>true</code> if you wish to retrieve all types of metadata for those that can be provided in multiple formats. eg. titles, descriptions and images.";
 
         private const string TimeoutDescription =
             "How long the api should wait for a response from the given url. Has an allowed range of 100 to 3000 milliseconds.";
@@ -39,9 +39,9 @@ namespace UrlMetadata.Controllers
 
         [HttpGet]
         [RouteDescribed("ping", "A basic ping endpoint you can use to make sure that the service is still running")]
-        public ActionResult<object> Ping()
+        public ActionResult<PingResponseDto> Ping()
         {
-            return new {datetime = DateTime.Now};
+            return new PingResponseDto { DateTime = DateTime.Now};
         }
 
         [HttpGet]

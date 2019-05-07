@@ -87,3 +87,23 @@ pre {
 code[class*=language-], pre[class*=language-] {
   font-size: 16px;
 }
+
+.type-expand-button {
+  border: 1px solid #708090;
+  padding: 2px;
+  user-select: none;
+  cursor: pointer;
+
+  &:after {
+    content: '...';
+  }
+
+  &.open:after {
+    content: ' - ';
+  }
+
+  &:not(.open) + .type {
+    display: none;
+  }
+
+}
