@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<UrlMetadata.Dtos.ApiDoc.EndpointDto>
 @{
-  ViewData["Title"] = "Api Documentation";
-  Layout = "_Layout";
+    ViewBag.Title = "Api Documentation - Url Metadata API";
+    ViewBag.Description = "Endpoint documentation for the Url Metadata API";
+    Layout = "_Layout";
 }
 
 <div class="section max-width">
@@ -49,4 +50,5 @@
 <code class="language-js">@Html.Partial("_Type", method.ReturnType, new ViewDataDictionary(ViewData) { { "indentation", 2 } })</code></pre>
 }
     }
+    <br />
 </div>

@@ -4,19 +4,19 @@
   color: $text-color;
   background-color: $secondary-color;
   cursor: pointer;
-  transition: all $animation-length-tiny;
+  transition: padding $animation-length-tiny, background $animation-length-tiny;
   white-space: nowrap;
   font-size: 16px;
-  padding: 16px 48px;
+  padding: 14px 48px;
   margin-top: 16px;
   border: 2px solid $tertiary-color;
 
   @media only screen and (max-width: $brk-l) {
-    padding: 16px 40px;
+    padding: 14px 40px;
   }
 
   @media only screen and (max-width: $brk-m) {
-    padding: 16px 32px;
+    padding: 14px 32px;
   }
 
   &:disabled {
