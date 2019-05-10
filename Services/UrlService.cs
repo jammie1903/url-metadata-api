@@ -10,7 +10,14 @@ namespace UrlMetadata.Services
         public string ReadHeader(string url, int timeout)
         {
             var request = (HttpWebRequest) WebRequest.Create(url);
+
             request.Timeout = timeout;
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            request.Accept = "*/*";
+            request.Referer = url;
+            request.UserAgent = "UrlMetadataApi";
+            request.Headers.Add("cache-control", "no-cache");
+
             using (var response = (HttpWebResponse) request.GetResponse())
             using (var stream = response.GetResponseStream())
             {
