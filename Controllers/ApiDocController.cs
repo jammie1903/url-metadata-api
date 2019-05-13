@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Newtonsoft.Json;
-using UrlMetadata.Attributes;
-using UrlMetadata.Dtos.ApiDoc;
-using UrlMetadata.ExtensionMethods;
+﻿using Microsoft.AspNetCore.Mvc;
 using UrlMetadata.Services.Interfaces;
 
 namespace UrlMetadata.Controllers

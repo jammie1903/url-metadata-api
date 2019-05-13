@@ -144,18 +144,33 @@ namespace UrlMetadata.Services
         {
             string name;
 
-            if (type.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
-            {
-                name = type.GetGenericArguments()[0].Name;
-                if (name.ToLower().EndsWith("dto"))
-                    name = name.Substring(0, name.Length - 3);
-                name += "[]";
+            if (type.IsGenericType) {
+                if (typeof(IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
+                {
+                    name = GetTypeName(type.GetGenericArguments()[0]) + "[]";
+                }
+                else
+                {
+                    name = type.Name.Substring(0, type.Name.LastIndexOf("`", StringComparison.Ordinal));
+                    if (name.ToLower().EndsWith("dto"))
+                        name = name.Substring(0, name.Length - 3);
+                    if (type.IsInterface && type.Name.StartsWith("I"))
+                    {
+                        name = name.Substring(1, name.Length - 1);
+                    }
+
+                    name += $"<{string.Join(", ", type.GetGenericArguments().Select(GetTypeName))}>";
+                }
             }
             else
             {
                 name = type.Name;
                 if (name.ToLower().EndsWith("dto"))
                     name = name.Substring(0, name.Length - 3);
+                if (type.IsInterface && type.Name.StartsWith("I"))
+                {
+                    name = name.Substring(1, name.Length - 1);
+                }
             }
 
             return name;

@@ -45,6 +45,41 @@ namespace UrlMetadata.ExtensionMethods
             }
         }
 
+        public static RawMetadataDto GetAllMetadata(this HtmlDocument document)
+        {
+            var title = document.ReadFirstNodeValue("//head/title");
+            var meta = document.DocumentNode.SelectNodes("//head/meta");
+
+            var metaEntries = new Dictionary<string, string>{{"title", title}};
+
+            foreach (var htmlNode in meta)
+            {
+                var content = htmlNode.GetAttributeValue("content", null);
+                if (string.IsNullOrEmpty(content)) continue;
+
+                var name = htmlNode.GetAttributeValue("name", null);
+                if (!string.IsNullOrEmpty(name)) metaEntries.TryAdd(name, content);
+
+                var property = htmlNode.GetAttributeValue("property", null);
+                if (!string.IsNullOrEmpty(property)) metaEntries.TryAdd(property, content);
+            }
+
+            var links = document.DocumentNode.SelectNodes("//head/link");
+
+            var linkEntries = new Dictionary<string, string>();
+
+            foreach (var htmlNode in links)
+            {
+                var rel = htmlNode.GetAttributeValue("rel", null);
+                if (string.IsNullOrEmpty(rel)) continue;
+
+                var href = htmlNode.GetAttributeValue("href", null);
+                if (!string.IsNullOrEmpty(href)) linkEntries.TryAdd(rel, href);
+            }
+
+            return new RawMetadataDto { Meta = metaEntries, Links = linkEntries};
+        }
+
         /// <summary>
         /// Extracts information from the given documents metadata.
         /// <see href="http://www.iacquire.com/blog/18-meta-tags-every-webpage-should-have-in-2013">More information can be found here</see>

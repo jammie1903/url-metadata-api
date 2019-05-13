@@ -76,5 +76,35 @@ namespace UrlMetadata.Controllers
             doc.LoadHtml(html);
             return doc.ExtractPageMetadata(metadataType, all);
         }
+
+        [HttpGet]
+        [RouteDescribed("metadata/raw", "Gets all meta and link entries found in the header of the given url")]
+        public ActionResult<RawMetadataDto> GetRawMetadata(
+            [FromQueryDescribed("url", "The url you wish to lookup")] string url,
+            [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                _logger.LogInformation("Request received with no url provided");
+                return BadRequest(new ErrorResponseDto("Please specify a url"));
+            }
+
+            timeout = Math.Max(Math.Min(timeout, 3000), 100);
+
+            string html;
+            try
+            {
+                html = _urlService.ReadHeader(url, timeout);
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation($"Could not read url: {url}", e);
+                return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
+            }
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            return doc.GetAllMetadata();
+        }
     }
 }
