@@ -22,6 +22,10 @@ namespace UrlMetadata.Utilities
             {
                 serializer.Serialize(writer, value.Value);
             }
+            else if(value.IsRoot)
+            {
+                serializer.Serialize(writer, new { });
+            }
             else
             {
                 writer.WriteNull();
@@ -33,6 +37,8 @@ namespace UrlMetadata.Utilities
     public class MetaTreeItem
     {
         public object Value { get; internal set; }
+        public bool IsRoot { get; }
+
         private readonly IDictionary<string, IList<MetaTreeItem>> _items = new Dictionary<string, IList<MetaTreeItem>>();
 
         public bool HasChildValues => _items.Count > 0;
@@ -60,9 +66,10 @@ namespace UrlMetadata.Utilities
 
         }
 
-        public MetaTreeItem(object value = null)
+        public MetaTreeItem(object value = null, bool isRoot = false)
         {
             Value = value;
+            IsRoot = isRoot;
         }
 
         internal MetaTreeItem Get(string key)
@@ -88,7 +95,7 @@ namespace UrlMetadata.Utilities
 
     public class MetaTree
     {
-        public MetaTreeItem Root { get; } = new MetaTreeItem();
+        public MetaTreeItem Root { get; } = new MetaTreeItem(null, true);
 
         public void Add(string key, object value)
         {

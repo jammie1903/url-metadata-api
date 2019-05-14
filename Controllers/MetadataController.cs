@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using UrlMetadata.ExtensionMethods;
 using UrlMetadata.Enums;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using UrlMetadata.Attributes;
 using UrlMetadata.Dtos;
 using UrlMetadata.Services.Interfaces;
@@ -52,10 +52,35 @@ namespace UrlMetadata.Controllers
             [FromQueryDescribed("preference", PreferenceDescription)] string preference = "OpenGraph",
             [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 2000)
         {
+            HtmlDocument doc;
+            try
+            {
+                doc = LoadDocument(url, timeout);
+            }
+            catch (ErrorResponseException e)
+            {
+                return e.ErrorResponse;
+            }
+
+            try
+            {
+
+                Enum.TryParse(preference, true, out MetadataType metadataType);
+                return doc.ExtractPageMetadata(metadataType);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error on ExtractPageMetadata for url: {url}", e);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto("An unexpected error occured"));
+            }
+        }
+
+        private HtmlDocument LoadDocument(string url, int timeout)
+        {
             if (string.IsNullOrWhiteSpace(url))
             {
                 _logger.LogInformation("Request received with no url provided");
-                return BadRequest(new ErrorResponseDto("Please specify a url"));
+                throw new ErrorResponseException(BadRequest("Please specify a url"));
             }
 
             timeout = Math.Max(Math.Min(timeout, 3000), 100);
@@ -68,13 +93,13 @@ namespace UrlMetadata.Controllers
             catch (Exception e)
             {
                 _logger.LogInformation($"Could not read url: {url}", e);
-                return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
+                throw new ErrorResponseException(NotFound("Page metadata could not be read for this url"));
             }
 
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
-            Enum.TryParse(preference, true, out MetadataType metadataType);
-            return doc.ExtractPageMetadata(metadataType);
+
+            return doc;
         }
 
         [HttpGet]
@@ -83,28 +108,25 @@ namespace UrlMetadata.Controllers
             [FromQueryDescribed("url", "The url you wish to lookup")] string url,
             [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
         {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                _logger.LogInformation("Request received with no url provided");
-                return BadRequest(new ErrorResponseDto("Please specify a url"));
-            }
-
-            timeout = Math.Max(Math.Min(timeout, 3000), 100);
-
-            string html;
+            HtmlDocument doc;
             try
             {
-                html = _urlService.ReadHeader(url, timeout);
+                doc = LoadDocument(url, timeout);
+            }
+            catch (ErrorResponseException e)
+            {
+                return e.ErrorResponse;
+            }
+
+            try
+            {
+                return doc.GetAllMetadata();
             }
             catch (Exception e)
             {
-                _logger.LogInformation($"Could not read url: {url}", e);
-                return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
+                _logger.LogError($"Error on GetAllMetadata for url: {url}", e);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto("An unexpected error occured"));
             }
-
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            return doc.GetAllMetadata();
         }
 
         [HttpGet]
@@ -113,28 +135,25 @@ namespace UrlMetadata.Controllers
             [FromQueryDescribed("url", "The url you wish to lookup")] string url,
             [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
         {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                _logger.LogInformation("Request received with no url provided");
-                return BadRequest(new ErrorResponseDto("Please specify a url"));
-            }
-
-            timeout = Math.Max(Math.Min(timeout, 3000), 100);
-
-            string html;
+            HtmlDocument doc;
             try
             {
-                html = _urlService.ReadHeader(url, timeout);
+                doc = LoadDocument(url, timeout);
+            }
+            catch (ErrorResponseException e)
+            {
+                return e.ErrorResponse;
+            }
+
+            try
+            {
+                return doc.GetMetadataTree();
             }
             catch (Exception e)
             {
-                _logger.LogInformation($"Could not read url: {url}", e);
-                return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
+                _logger.LogError($"Error on GetMetadataTree for url: {url}", e);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDto("An unexpected error occured"));
             }
-
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            return doc.GetMetadataTree();
         }
     }
 }

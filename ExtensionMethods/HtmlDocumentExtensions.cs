@@ -15,6 +15,11 @@ namespace UrlMetadata.ExtensionMethods
             return nodes?.First();
         }
 
+        public static IEnumerable<HtmlNode> ReadNodes(this HtmlDocument document, string xpathLookup)
+        {
+            return document.DocumentNode.SelectNodes(xpathLookup)?.Elements() ?? new HtmlNode[0];
+        }
+
         public static string ReadFirstNodeValue(this HtmlDocument document, string xpathLookup)
         {
             var node = document.ReadFirstNode(xpathLookup);
@@ -49,7 +54,7 @@ namespace UrlMetadata.ExtensionMethods
         public static RawMetadataDto GetAllMetadata(this HtmlDocument document)
         {
             var title = document.ReadFirstNodeValue("//head/title");
-            var meta = document.DocumentNode.SelectNodes("//head/meta");
+            var meta = document.ReadNodes("//head/meta");
 
             var metaEntries = new Dictionary<string, string>();
 
@@ -65,7 +70,7 @@ namespace UrlMetadata.ExtensionMethods
                 if (!string.IsNullOrEmpty(property)) metaEntries.ForceAdd(property, content);
             }
 
-            var links = document.DocumentNode.SelectNodes("//head/link");
+            var links = document.ReadNodes("//head/link");
 
             var linkEntries = new Dictionary<string, string>();
 
@@ -84,7 +89,7 @@ namespace UrlMetadata.ExtensionMethods
         public static TreeMetadataDto GetMetadataTree(this HtmlDocument document)
         {
             var title = document.ReadFirstNodeValue("//head/title");
-            var meta = document.DocumentNode.SelectNodes("//head/meta");
+            var meta = document.ReadNodes("//head/meta");
 
             var tree = new MetaTree();
 
@@ -102,9 +107,9 @@ namespace UrlMetadata.ExtensionMethods
 
             var linkTree = new MetaTree();
 
-            var links = document.DocumentNode.SelectNodes("//head/link");
+            var links = document.ReadNodes("//head/link");
            
-            foreach (var htmlNode in links)
+            foreach(var htmlNode in links)
             {
                 var rel = htmlNode.GetAttributeValue("rel", null);
                 if (string.IsNullOrEmpty(rel)) continue;

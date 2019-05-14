@@ -53,7 +53,10 @@ class TestUrlForm extends React.Component {
 
     this.setState({ error: '', output: null, outputPlaceholder: '' });
 
-    fetch(`/api/metadata${this.state.endpoint !== 'Basic' ? `/${this.state.endpoint.toLowerCase()}` : ''}?url=${this.urlInput.value.trim()}&priority=${this.state.priority}`)
+    const url = `/api/metadata${this.state.endpoint !== 'Basic' ? `/${this.state.endpoint.toLowerCase()}` : ''}`;
+    const priority = this.state.endpoint === 'Basic' ? `&priority=${this.state.priority}` : '';
+
+    fetch(`${url}?url=${this.urlInput.value.trim()}${priority}`)
       .then(response => response.json())
       .then(json => {
         const codeHtml = Prism.highlight(JSON.stringify(json, null, ' '), Prism.languages.json, 'json');
