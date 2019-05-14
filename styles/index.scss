@@ -122,5 +122,9 @@ code[class*=language-], pre[class*=language-] {
   &:not(.open) + .type {
     display: none;
   }
+}
 
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }

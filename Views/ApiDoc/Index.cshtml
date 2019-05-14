@@ -6,49 +6,49 @@
 }
 
 <div class="section max-width">
-
   <h2>Api Documentation</h2>
 
   @foreach (var method in Model)
   {
-    <h3>@method.Name</h3>
+    <div class="endpoint">
+      <h3>@method.Name</h3>
 
-    <div class="endpoint-info">
-      @foreach (var httpMethod in method.Methods)
-      {
-        <span class="http-method @httpMethod.ToLower()">@httpMethod</span>
-      }
-      <code>@method.Route</code>
-    </div>
-
-    <p>@method.Description</p>
-
-    if (method.QueryParams.Any())
-    {
-      <h4>Query Parameters</h4>
-
-      <table class="wrap-table">
-        @foreach (var param in method.QueryParams)
+      <div class="endpoint-info">
+        @foreach (var httpMethod in method.Methods)
         {
-          <tr>
-            <td><strong>@param.Name@(param.Mandatory ? "*" : "") @param.Type:</strong></td>
-            <td>
-              @Html.Raw(param.Description)
-              <br />
-              @(param.Mandatory ? "" : $"default: {param.DefaultValue}")
-            </td>
-          </tr>
+          <span class="http-method @httpMethod.ToLower()">@httpMethod</span>
         }
-      </table>
-    }
+        <code>@method.Route</code>
+      </div>
 
-    <span>Return Type: @method.ReturnType.Name</span>
+      <p>@method.Description</p>
 
-    if(method.ReturnType.Fields.Any())
-    {
-    <pre class="language-js">
+      @if (method.QueryParams.Any())
+      {
+        <h4>Query Parameters</h4>
+
+        <table class="wrap-table">
+          @foreach (var param in method.QueryParams)
+          {
+            <tr>
+              <td><strong>@param.Name@(param.Mandatory ? "*" : "") @param.Type:</strong></td>
+              <td>
+                @Html.Raw(param.Description)
+                <br />
+                @(param.Mandatory ? "" : $"default: {param.DefaultValue}")
+              </td>
+            </tr>
+          }
+        </table>
+      }
+
+      <span>Return Type: @method.ReturnType.Name</span>
+
+      @if(method.ReturnType.Fields.Any())
+      {
+      <pre class="language-js">
 <code class="language-js">@Html.Partial("_Type", method.ReturnType, new ViewDataDictionary(ViewData) { { "indentation", 2 } })</code></pre>
 }
-    <br />
+    </div>
     }
 </div>

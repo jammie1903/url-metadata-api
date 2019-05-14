@@ -29,7 +29,7 @@ class TestUrlForm extends React.Component {
       error: '',
       outputPlaceholder: 'The response will appear here',
       output: null,
-      all: true,
+      endpoint: 'Basic',
       priority: 'OpenGraph'
     }
   }
@@ -53,7 +53,7 @@ class TestUrlForm extends React.Component {
 
     this.setState({ error: '', output: null, outputPlaceholder: '' });
 
-    fetch(`/api/metadata?url=${this.urlInput.value.trim()}${this.state.all ? '&all=true' : ''}&priority=${this.state.priority}`)
+    fetch(`/api/metadata${this.state.endpoint !== 'Basic' ? `/${this.state.endpoint.toLowerCase()}` : ''}?url=${this.urlInput.value.trim()}&priority=${this.state.priority}`)
       .then(response => response.json())
       .then(json => {
         const codeHtml = Prism.highlight(JSON.stringify(json, null, ' '), Prism.languages.json, 'json');
@@ -69,8 +69,8 @@ class TestUrlForm extends React.Component {
     this.setState({ url: e.target.value });
   }
 
-  onAllChange = all => {
-    this.setState({ all });
+  onEndpointChange = endpoint => {
+    this.setState({ endpoint });
   }
 
   onPriorityChange = priority => {
@@ -87,7 +87,7 @@ class TestUrlForm extends React.Component {
           <button type="submit" className="button">Submit</button>
         </div>
         <span className='error'>{this.state.error}</span>
-        <Options all={this.state.all} onAllChange={this.onAllChange}
+        <Options endpoint={this.state.endpoint} onEndpointChange={this.onEndpointChange}
           priority={this.state.priority} onPriorityChange={this.onPriorityChange} />
         <pre>
           {this.state.output
@@ -118,8 +118,8 @@ class Options extends React.Component {
     this.setState({ open: !this.state.open });
   }
 
-  onAllChange = e => {
-    this.props.onAllChange && this.props.onAllChange(e.target.checked);
+  onEndpointChange = e => {
+    this.props.onEndpointChange && this.props.onEndpointChange(e.target.value);
   }
 
   onPriorityChange = e => {
@@ -131,20 +131,25 @@ class Options extends React.Component {
       <div>
         <a className={`options-button${this.state.open ? ' open' : ''}`} onClick={this.toggle}>{this.state.open ? 'Hide' : 'Show'} options</a>
         <div className="options">
-          <label className="checkbox">
-            <span className="label-text">Get all</span>
-            <input type={'checkbox'} checked={this.props.all} onChange={this.onAllChange}/>
-            <span className="checkmark"></span>
-          </label>
-          <br/>
-          Priority:
-          {['OpenGraph', 'Twitter', 'Generic'].map(type => (
+          Type:
+          {['Basic', 'All', 'Tree'].map(type => (
             <label key={type} className="radio">
               <span>{type}</span>
-              <input type={'radio'} value={type} checked={this.props.priority === type} onChange={this.onPriorityChange} />
+              <input type={'radio'} value={type} checked={this.props.endpoint === type} onChange={this.onEndpointChange} />
               <span className="mark"></span>
             </label>
           ))}
+          <br />
+          <div className={this.props.endpoint !== "Basic" ? 'disabled' : null}>
+            Priority:
+            {['OpenGraph', 'Twitter', 'Generic'].map(type => (
+              <label key={type} className="radio">
+                <span>{type}</span>
+                <input type={'radio'} value={type} checked={this.props.priority === type} onChange={this.onPriorityChange} />
+                <span className="mark"></span>
+              </label>
+              ))}
+          </div>
         </div>
       </div>
     );

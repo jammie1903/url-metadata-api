@@ -1,3 +1,16 @@
+.endpoint {
+  border: 1px solid #8D99AE;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin: 24px -12px;
+
+  h3 {
+    margin: 0 -12px 16px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #8D99AE;
+  }
+}
+
 .endpoint-info {
   border: 2px solid $tertiary-color;
   background: $color-white;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HtmlAgilityPack;
 using UrlMetadata.Dtos;
 using UrlMetadata.Enums;
+using UrlMetadata.Utilities;
 
 namespace UrlMetadata.ExtensionMethods
 {
@@ -26,7 +27,7 @@ namespace UrlMetadata.ExtensionMethods
             return node?.GetAttributeValue(attributeName, null);
         }
 
-        private static string Prioritise(MetadataType priority, AlternativesDto alternatives)
+        private static string Prioritise(MetadataType priority, Alternatives alternatives)
         {
             switch (priority)
             {
@@ -50,7 +51,7 @@ namespace UrlMetadata.ExtensionMethods
             var title = document.ReadFirstNodeValue("//head/title");
             var meta = document.DocumentNode.SelectNodes("//head/meta");
 
-            var metaEntries = new Dictionary<string, string>{{"title", title}};
+            var metaEntries = new Dictionary<string, string>();
 
             foreach (var htmlNode in meta)
             {
@@ -58,10 +59,10 @@ namespace UrlMetadata.ExtensionMethods
                 if (string.IsNullOrEmpty(content)) continue;
 
                 var name = htmlNode.GetAttributeValue("name", null);
-                if (!string.IsNullOrEmpty(name)) metaEntries.TryAdd(name, content);
+                if (!string.IsNullOrEmpty(name)) metaEntries.ForceAdd(name, content);
 
                 var property = htmlNode.GetAttributeValue("property", null);
-                if (!string.IsNullOrEmpty(property)) metaEntries.TryAdd(property, content);
+                if (!string.IsNullOrEmpty(property)) metaEntries.ForceAdd(property, content);
             }
 
             var links = document.DocumentNode.SelectNodes("//head/link");
@@ -74,10 +75,45 @@ namespace UrlMetadata.ExtensionMethods
                 if (string.IsNullOrEmpty(rel)) continue;
 
                 var href = htmlNode.GetAttributeValue("href", null);
-                if (!string.IsNullOrEmpty(href)) linkEntries.TryAdd(rel, href);
+                if (!string.IsNullOrEmpty(href)) linkEntries.ForceAdd(rel, href);
             }
 
-            return new RawMetadataDto { Meta = metaEntries, Links = linkEntries};
+            return new RawMetadataDto { Title = title, Meta = metaEntries, Links = linkEntries };
+        }
+
+        public static TreeMetadataDto GetMetadataTree(this HtmlDocument document)
+        {
+            var title = document.ReadFirstNodeValue("//head/title");
+            var meta = document.DocumentNode.SelectNodes("//head/meta");
+
+            var tree = new MetaTree();
+
+            foreach (var htmlNode in meta)
+            {
+                var content = htmlNode.GetAttributeValue("content", null);
+                if (string.IsNullOrEmpty(content)) continue;
+
+                var name = htmlNode.GetAttributeValue("name", null);
+                if (!string.IsNullOrEmpty(name)) tree.Add(name, content);
+
+                var property = htmlNode.GetAttributeValue("property", null);
+                if (!string.IsNullOrEmpty(property)) tree.Add(property, content);
+            }
+
+            var linkTree = new MetaTree();
+
+            var links = document.DocumentNode.SelectNodes("//head/link");
+           
+            foreach (var htmlNode in links)
+            {
+                var rel = htmlNode.GetAttributeValue("rel", null);
+                if (string.IsNullOrEmpty(rel)) continue;
+
+                var href = htmlNode.GetAttributeValue("href", null);
+                if (!string.IsNullOrEmpty(href)) linkTree.Add(rel, href);
+            }
+
+            return new TreeMetadataDto {Title = title, Meta = tree.Root, Links = linkTree.Root };
         }
 
         /// <summary>
@@ -88,13 +124,13 @@ namespace UrlMetadata.ExtensionMethods
         /// <param name="priority"></param>
         /// <param name="returnAll">if true, all alternatives are returned for fields with multiple sources</param>
         /// <returns></returns>
-        public static UrlMetadataDto ExtractPageMetadata(this HtmlDocument document, MetadataType priority, bool returnAll)
+        public static UrlMetadataDto ExtractPageMetadata(this HtmlDocument document, MetadataType priority)
         {
             // title
             // <title> tag
             // opengraph : <meta property=”og:title” content="thetitle"/>
             // twitter : <meta name=”twitter:title” content=”content”>
-            var titles = new AlternativesDto
+            var titles = new Alternatives
             {
                 Generic = document.ReadFirstNodeValue("//head/title"),
                 OpenGraph = document.ReadFirstNodeAttributeValue("//head/meta[@property='og:title']", "content"),
@@ -114,7 +150,7 @@ namespace UrlMetadata.ExtensionMethods
             // <meta name="description">
             // <meta property=”og:description” content="thedescription">
             // <meta name=”twitter:description” content=”the description”>
-            var descriptions = new AlternativesDto
+            var descriptions = new Alternatives
             {
                 Generic = document.ReadFirstNodeAttributeValue("//head/meta[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='description']", "content"),
                 OpenGraph = document.ReadFirstNodeAttributeValue("//head/meta[@property='og:description']", "content"),
@@ -143,7 +179,7 @@ namespace UrlMetadata.ExtensionMethods
             // image
             // <meta property=”og:image” content=”http://www.iacquire.com/some-thumbnail.jpg”/>
             // <meta name=”twitter:image” content=”http://graphics8.nytimes.com/images/2012/02/19/us/19whitney-span/19whitney-span-articleLarge.jpg”>
-            var images = new AlternativesDto
+            var images = new Alternatives
             {
                 OpenGraph = document.ReadFirstNodeAttributeValue("//head/meta[@property='og:image']", "content"),
                 Twitter = document.ReadFirstNodeAttributeValue("//head/meta[@name='twitter:image']", "content")
@@ -172,17 +208,14 @@ namespace UrlMetadata.ExtensionMethods
 
             return new UrlMetadataDto {
                 Title = title,
-                Titles = returnAll ? titles : null,
                 Domain = domain,
                 SiteName = siteName,
                 Description = description,
-                Descriptions = returnAll ? descriptions : null,
                 Author = author,
                 ThemeColor = themeColor,
                 Type = type,
                 Card = card,
                 Image = image,
-                Images = returnAll ? images : null,
                 Favicon = favicon,
                 AdditionalInformation = additionalInformation
             };

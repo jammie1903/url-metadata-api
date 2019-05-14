@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using UrlMetadata.Attributes;
 using UrlMetadata.Dtos;
 using UrlMetadata.Services.Interfaces;
+using UrlMetadata.Utilities;
 
 namespace UrlMetadata.Controllers
 {
@@ -49,8 +50,7 @@ namespace UrlMetadata.Controllers
         public ActionResult<UrlMetadataDto> GetMetadata(
             [FromQueryDescribed("url", "The url you wish to lookup")] string url,
             [FromQueryDescribed("preference", PreferenceDescription)] string preference = "OpenGraph",
-            [FromQueryDescribed("all", AllDescription)] bool all = false,
-            [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
+            [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 2000)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -71,15 +71,15 @@ namespace UrlMetadata.Controllers
                 return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
             }
 
-            Enum.TryParse(preference, true, out MetadataType metadataType);
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
-            return doc.ExtractPageMetadata(metadataType, all);
+            Enum.TryParse(preference, true, out MetadataType metadataType);
+            return doc.ExtractPageMetadata(metadataType);
         }
 
         [HttpGet]
-        [RouteDescribed("metadata/raw", "Gets all meta and link entries found in the header of the given url")]
-        public ActionResult<RawMetadataDto> GetRawMetadata(
+        [RouteDescribed("metadata/all", "Gets all meta and link entries found in the header of the given url")]
+        public ActionResult<RawMetadataDto> GetAllMetadata(
             [FromQueryDescribed("url", "The url you wish to lookup")] string url,
             [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
         {
@@ -105,6 +105,36 @@ namespace UrlMetadata.Controllers
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
             return doc.GetAllMetadata();
+        }
+
+        [HttpGet]
+        [RouteDescribed("metadata/tree", "Gets all meta/link entries and build a tree structure from them")]
+        public ActionResult<TreeMetadataDto> GetMetadataTree(
+            [FromQueryDescribed("url", "The url you wish to lookup")] string url,
+            [FromQueryDescribed("timeout", TimeoutDescription)] int timeout = 1000)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                _logger.LogInformation("Request received with no url provided");
+                return BadRequest(new ErrorResponseDto("Please specify a url"));
+            }
+
+            timeout = Math.Max(Math.Min(timeout, 3000), 100);
+
+            string html;
+            try
+            {
+                html = _urlService.ReadHeader(url, timeout);
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation($"Could not read url: {url}", e);
+                return NotFound(new ErrorResponseDto("Page metadata could not be read for this url"));
+            }
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            return doc.GetMetadataTree();
         }
     }
 }

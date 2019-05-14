@@ -5,6 +5,9 @@ namespace UrlMetadata.Dtos
 {
     public class RawMetadataDto
     {
+        [Description("The title tag of the url")]
+        public string Title { get; set; }
+
         [Description("All the meta tag entries with both `content` and `name/property` attributes")]
         public IDictionary<string, string> Meta { get; set; }
 
