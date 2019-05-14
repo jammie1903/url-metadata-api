@@ -3,6 +3,7 @@
   line-height: 1em;
   position: relative;
   display: inline-block;
+  text-decoration: none;
 
   &:before {
     content: '\A0';
@@ -23,6 +24,18 @@
 
 .site-icon-white {
   background: icon(icon-white) no-repeat;
+  background-size: contain;
+  background-position: 50%;
+}
+
+.icon-github {
+  background: icon(github) no-repeat;
+  background-size: contain;
+  background-position: 50%;
+}
+
+.icon-linkedin {
+  background: icon(linkedin) no-repeat;
   background-size: contain;
   background-position: 50%;
 }

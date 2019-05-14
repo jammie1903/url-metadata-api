@@ -3,6 +3,7 @@
 @import 'mixins/link-color';
 
 @import 'base';
+@import 'margins';
 @import 'icon';
 @import 'section';
 @import 'header';
@@ -58,6 +59,20 @@ footer {
 
   .section {
     padding: 8px 32px;
+    display: flex;
+  }
+
+  a {
+    @include link-color($light-text-color, $light-text-color);
+  }
+
+  .copyright {
+    flex-grow: 1;
+  }
+
+  .icon {
+    width: 1.4em;
+    line-height: 1.4em;
   }
 }
 
